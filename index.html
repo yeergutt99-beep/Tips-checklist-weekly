@@ -95,6 +95,28 @@
       </div>
     </template>
 
-    <script src="app.js"></script>
+    <!-- 🔥 FIREBASE -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDVL1-2CMm4kzjSmJSY1upli_LJSNX2rJg",
+        authDomain: "tips-checklist-weekly.firebaseapp.com",
+        projectId: "tips-checklist-weekly",
+        storageBucket: "tips-checklist-weekly.firebasestorage.app",
+        messagingSenderId: "409955375770",
+        appId: "1:409955375770:web:a5aca205265a33a8701d23"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.db = db;
+      window.firestoreHelpers = { doc, getDoc, setDoc };
+    </script>
+
+    <!-- 🔥 TU APP -->
+    <script type="module" src="app.js"></script>
   </body>
 </html>
