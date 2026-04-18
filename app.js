@@ -33,7 +33,7 @@ const pendingGrid = document.getElementById("pendingGrid");
 
 // STATE
 const state = {
-  data: loadState(),
+  data: null,
   session: null,
 };
 
@@ -56,15 +56,15 @@ function normalizeName(value) {
     .toLowerCase();
 }
 
-function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) {
-    try {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed.waiters) && parsed.weeks) {
-        return parsed;
-      }
-    } catch {}
+// 🔥 FIREBASE LOAD
+async function loadState() {
+  const { doc, getDoc } = window.firestoreHelpers;
+
+  const ref = doc(window.db, "app", "data");
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    return snap.data();
   }
 
   return {
@@ -76,8 +76,12 @@ function loadState() {
   };
 }
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+// 🔥 FIREBASE SAVE
+async function saveState() {
+  const { doc, setDoc } = window.firestoreHelpers;
+
+  const ref = doc(window.db, "app", "data");
+  await setDoc(ref, state.data);
 }
 
 function ensureWeekData(weekId) {
@@ -198,7 +202,6 @@ function renderWeek() {
 
     DAY_LABELS.forEach((_, i) => {
       const td = document.createElement("td");
-
       const cell = weekRows[waiter.id][i];
 
       const select = document.createElement("select");
@@ -209,8 +212,8 @@ function renderWeek() {
         select.append(opt);
       });
 
-select.value = cell.waiterStatus;
-select.disabled = !canEditWaiterRow(waiter.id) || cell.adminApproved;
+      select.value = cell.waiterStatus;
+      select.disabled = !canEditWaiterRow(waiter.id) || cell.adminApproved;
 
       select.addEventListener("change", () => {
         cell.waiterStatus = select.value;
@@ -232,7 +235,7 @@ select.disabled = !canEditWaiterRow(waiter.id) || cell.adminApproved;
       // 🎨 COLORES
       td.classList.remove("ok", "otro", "franco", "na");
 
-      if (!cell.waiterStatus) td.classList.add("na"); // rojo
+      if (!cell.waiterStatus) td.classList.add("na");
       else if (cell.waiterStatus === "OK") td.classList.add("ok");
       else if (cell.waiterStatus === "Otro Area") td.classList.add("otro");
       else if (cell.waiterStatus === "FRANCO") td.classList.add("franco");
@@ -296,4 +299,10 @@ function init() {
   });
 }
 
-init();
+// 🔥 ARRANQUE CON FIREBASE
+async function initApp() {
+  state.data = await loadState();
+  init();
+}
+
+initApp();
