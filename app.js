@@ -304,13 +304,20 @@ function init() {
   });
 }
 
-// 🔥 ARRANQUE
-async function initApp() {
-  // 🛑 Esperar a que Firebase esté listo
-  while (!window.firestoreHelpers || !window.db) {
-    await new Promise((r) => setTimeout(r, 50));
-  }
+async function waitForFirebase() {
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (window.db && window.firestoreHelpers) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
+}
 
+// 🔥 ARRANQUE CORRECTO
+async function initApp() {
+  await waitForFirebase(); // ⬅️ CLAVE
   state.data = await loadState();
   init();
 }
