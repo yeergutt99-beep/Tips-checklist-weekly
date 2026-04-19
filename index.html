@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+
 <section id="loginScreen" class="login-screen">
   <div class="login-card">
     <h1>Hard Rock Ushuaia</h1>
@@ -27,6 +28,7 @@
       <h1>Hard Rock Ushuaia</h1>
       <p>Control de entrega de propinas</p>
     </div>
+
     <div class="session-panel">
       <label>
         Semana
@@ -47,7 +49,7 @@
       </label>
 
       <div id="activeUserPill" class="active-user"></div>
-      <button id="logoutBtn" type="button">Cerrar sesión</button>
+      <button id="logoutBtn">Cerrar sesión</button>
     </div>
   </header>
 
@@ -60,6 +62,7 @@
           el admin confirma.
         </p>
       </div>
+
       <div class="table-wrap">
         <table id="checklistTable">
           <thead></thead>
@@ -73,50 +76,54 @@
         <h2>Personas pendientes por día</h2>
         <p>Vista general para todos los perfiles.</p>
       </div>
+
       <div id="pendingGrid" class="pending-grid"></div>
     </section>
   </main>
 </div>
 
-    <template id="dayCellTemplate">
-      <div class="cell-content">
-        <select class="waiter-status">
-          <option value="">Sin marcar</option>
-          <option value="Entregado">Entregado</option>
-          <option value="Otro Area">Otro Area</option>
-          <option value="S/N">S/N</option>
-          <option value="Franco">Franco</option>
-        </select>
-        <label class="admin-check-label">
-          <input type="checkbox" class="admin-check" />
-          Aprobación admin
-        </label>
-        <span class="state-pill">Pendiente</span>
-      </div>
-    </template>
+<template id="dayCellTemplate">
+  <div class="cell-content">
+    <select class="waiter-status">
+      <option value="">Sin marcar</option>
+      <option value="Entregado">Entregado</option>
+      <option value="Otro Area">Otro Area</option>
+      <option value="S/N">S/N</option>
+      <option value="Franco">Franco</option>
+    </select>
 
-    <!-- 🔥 FIREBASE -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <label class="admin-check-label">
+      <input type="checkbox" class="admin-check" />
+      Aprobación admin
+    </label>
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyDVL1-2CMm4kzjSmJSY1upli_LJSNX2rJg",
-        authDomain: "tips-checklist-weekly.firebaseapp.com",
-        projectId: "tips-checklist-weekly",
-        storageBucket: "tips-checklist-weekly.firebasestorage.app",
-        messagingSenderId: "409955375770",
-        appId: "1:409955375770:web:a5aca205265a33a8701d23"
-      };
+    <span class="state-pill">Pendiente</span>
+  </div>
+</template>
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+<!-- 🔥 FIREBASE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      window.db = db;
-      window.firestoreHelpers = { doc, getDoc, setDoc };
-    </script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDVL1-2CMm4kzjSmJSY1upli_LJSNX2rJg",
+    authDomain: "tips-checklist-weekly.firebaseapp.com",
+    projectId: "tips-checklist-weekly",
+    storageBucket: "tips-checklist-weekly.firebasestorage.app",
+    messagingSenderId: "409955375770",
+    appId: "1:409955375770:web:a5aca205265a33a8701d23"
+  };
 
-    <!-- 🔥 TU APP -->
-    <script type="module" src="app.js"></script>
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.db = db;
+  window.firestoreHelpers = { doc, getDoc, setDoc };
+</script>
+
+<!-- 🔥 APP (SIN MODULE) -->
+<script src="app.js"></script>
+
   </body>
 </html>
