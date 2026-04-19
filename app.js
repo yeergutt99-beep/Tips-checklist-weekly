@@ -185,7 +185,7 @@ function updatePendingGrid(weekId) {
 
 // RENDER
 function renderWeek() {
-  if (!state.session) return;
+  if (!state.session || !state.data) return;
 
   const weekId = weekPicker.value;
   ensureWeekData(weekId);
@@ -232,7 +232,6 @@ function renderWeek() {
         renderWeek();
       });
 
-      // 🎨 COLORES
       td.classList.remove("ok", "otro", "franco", "na");
 
       if (!cell.waiterStatus) td.classList.add("na");
@@ -252,6 +251,12 @@ function renderWeek() {
 
 // AUTH
 function login() {
+  // 🔥 BLOQUEO SI NO CARGÓ FIREBASE
+  if (!state.data) {
+    loginMessage.textContent = "Cargando datos... esperá un segundo";
+    return;
+  }
+
   const typed = loginInput.value.trim();
 
   if (!typed) {
@@ -299,7 +304,7 @@ function init() {
   });
 }
 
-// 🔥 ARRANQUE CON FIREBASE
+// 🔥 ARRANQUE
 async function initApp() {
   state.data = await loadState();
   init();
