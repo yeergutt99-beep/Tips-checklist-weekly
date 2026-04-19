@@ -306,6 +306,11 @@ function init() {
 
 // 🔥 ARRANQUE
 async function initApp() {
+  // 🛑 Esperar a que Firebase esté listo
+  while (!window.firestoreHelpers || !window.db) {
+    await new Promise((r) => setTimeout(r, 50));
+  }
+
   state.data = await loadState();
   init();
 }
